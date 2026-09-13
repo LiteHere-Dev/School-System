@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[School Name]</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="1.css?v=132" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+  </head>
+  <body>
+    <!-- ─── TOAST ─── -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ─── LOGIN ─── -->
+    <div id="login-screen">
+      <button
+        class="dm-toggle dm-toggle-login"
+        id="dm-btn-login"
+        onclick="toggleDarkMode()"
+        title="Toggle dark mode"
+      >
+        🌙
+      </button>
+      <div class="login-left">
+        <div class="login-left-pattern"></div>
+        <div class="school-crest">
+          <div class="crest-emblem">
+            <img src="logo.png" alt="[School Name] crest" />
+          </div>
+          <div class="school-name">[School<br /><em>Name]</em></div>
+          <div class="school-sub">[City] · [Country] · Est. [Year]</div>
+          <div class="motto">[Your Motto]</div>
+        </div>
+        <div class="login-facts">
+          <div class="login-fact">
+            <div class="login-fact-num">[Year]</div>
+            <div class="login-fact-label">Founded</div>
+          </div>
+          <div class="login-divider"></div>
+          <div class="login-fact">
+            <div class="login-fact-num">[#]</div>
+            <div class="login-fact-label">Students</div>
+          </div>
+          <div class="login-divider"></div>
+          <div class="login-fact">
+            <div class="login-fact-num">[Curriculum]</div>
+            <div class="login-fact-label">Curriculum</div>
+          </div>
+        </div>
+      </div>
+      <div class="login-right">
+        <div class="login-form-wrap">
+          <div class="login-heading">Welcome back</div>
+          <div class="login-sub-text">
+            Sign in to the [School Name] Learning Portal
+          </div>
+          <div class="role-tabs">
+            <button
+              class="role-tab active"
+              id="tab-student"
+              onclick="setRole('student', this)"
+            >
+              📚 Student
+            </button>
+            <button
+              class="role-tab"
+              id="tab-teacher"
+              onclick="setRole('teacher', this)"
+            >
+              🎓 Teacher
+            </button>
+            <button
+              class="role-tab"
+              id="tab-parent"
+              onclick="setRole('parent', this)"
+            >
+              👨‍👩‍👧 Parent
+            </button>
+            <button
+              class="role-tab"
+              id="tab-admin"
+              onclick="setRole('admin', this)"
+            >
+              🛡 Admin
+            </button>
+          </div>
+          <div class="field">
+            <label>Email or ID Number</label>
+            <input
+              type="text"
+              id="em"
+              placeholder="your@email.com or ID (e.g., 10-0001)"
+            />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="pw" placeholder="••••••••" />
+          </div>
+          <button class="login-btn" id="login-btn" onclick="doLogin()">Sign In →</button>
+          <div class="login-err" id="login-err">
+            ⚠️ Incorrect email/ID or password. Please try again.
+          </div>
+          <div style="text-align: center">
+            <div id="db-status" class="db-badge db-ok">
+              <div class="db-dot db-dot-ok"></div>
+              Database connected
+            </div>
+          </div>
+          <div class="login-note">
+            New here? Sign in with the admin account to get started.
+          </div>
+          <div class="signup-prompt" id="signup-prompt">
+            New student?
+            <a href="javascript:void(0)" onclick="openSignup()"
+              >Create an account</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── APP ─── -->
+    <div id="app">
+      <!-- Topbar (logo + user controls only — nav moved to sidebar) -->
+      <div class="topbar">
+        <button class="sb-toggle-btn" id="sb-toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar" aria-label="Toggle navigation">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="tb-logo">
+          <div class="tb-crest">
+            <img src="logo.png" alt="[School Name] crest" />
+          </div>
+          <div class="tb-name">[School <span>Name]</span></div>
+        </div>
+
+        <!-- Horizontal dropdown page menu -->
+        <div class="tb-nav-dropdown" id="tb-nav-dropdown">
+          <button class="tb-nav-toggle" id="tb-nav-toggle" onclick="toggleTbNavDropdown(event)" title="Menu">
+            <span>Menu</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="tb-nav-panel" id="tb-nav-panel" onclick="event.stopPropagation()"></div>
+        </div>
+
+        <div class="tb-right">
+          <button class="dm-toggle" id="dm-btn" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+          <div class="user-chip" id="user-chip" style="position:relative;cursor:pointer" onclick="toggleUserDropdown(event)">
+            <div class="u-av" id="uav"></div>
+            <span class="u-name" id="uname"></span>
+            <span class="u-role" id="urole"></span>
+            <div class="user-dropdown" id="user-dropdown" onclick="event.stopPropagation()">
+              <button class="ud-item" onclick="showSelfPasswordModal()">🔑 Reset Password</button>
+              <button class="ud-item" onclick="showLanguageModal()">🌐 Change Language</button>
+              <hr class="ud-divider">
+              <button class="ud-item" onclick="doLogout()">🚪 Sign out</button>
+            </div>
+          </div>
+          <button class="logout-btn" onclick="doLogout()">Sign out</button>
+        </div>
+      </div>
+
+      <!-- Body: sidebar + content -->
+      <div class="app-body">
+        <!-- Left sidebar navigation -->
+        <aside class="sidebar" id="sidebar">
+          <nav class="sb-nav" id="sb-nav"></nav>
+          <div class="sb-footer">
+            <button class="sb-footer-btn" onclick="showLanguageModal()">🌐 <span id="sb-lang-label">Language</span></button>
+            <button class="sb-footer-btn" onclick="toggleDarkMode()">🌙 <span>Theme</span></button>
+            <div style="text-align:center;font-size:10px;color:var(--ink-35,#777);padding:6px 0 2px;letter-spacing:.5px">BUILD V162</div>
+          </div>
+        </aside>
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+        <!-- Page content area -->
+        <main class="app-content">
+          <div id="page-dashboard" class="page"></div>
+          <div id="page-portal" class="page"></div>
+          <div id="page-grades" class="page"></div>
+          <div id="page-report" class="page"></div>
+          <div id="page-forums" class="page"></div>
+          <div id="page-admin" class="page"></div>
+          <div id="page-accounts" class="page"></div>
+          <div id="page-auditlog" class="page"></div>
+          <div id="page-aimonitor" class="page" data-no-translate="true"></div>
+          <div id="page-syshealth" class="page" data-no-translate="true"></div>
+          <div id="page-backups" class="page"></div>
+          <div id="page-migrations" class="page"></div>
+          <div id="page-classes" class="page"></div>
+          <div id="page-homeroom" class="page"></div>
+        </main>
+      </div>
+
+      <!-- Mobile bottom nav (kept for small screens) -->
+      <div class="mob-nav" id="mob-nav"></div>
+    </div>
+
+    <div class="ai-widget" id="ai-widget" style="display: none">
+      <div class="ai-panel" id="ai-panel">
+        <div class="ai-header">
+          <div class="ai-header-icon">🤖</div>
+          <div>
+            <div class="ai-header-title">School AI</div>
+            <div class="ai-header-sub">Powered by Ollama · Local & Private</div>
+          </div>
+          <div
+            class="ai-status"
+            id="ai-status"
+            onclick="checkOllamaStatus()"
+            title="Click to check connection"
+          >
+            <div class="ai-status-dot offline" id="ai-status-dot"></div>
+            <span id="ai-status-text">Offline</span>
+          </div>
+          <button class="ai-close" onclick="toggleAI()" title="Close">×</button>
+        </div>
+        <div class="ai-offline-banner" id="ai-offline-banner">
+          ⚠️ Ollama is not running. Start it with:
+          <code>ollama run llama3.2</code>
+        </div>
+        <div class="ai-messages" id="ai-messages">
+          <div class="ai-welcome">
+            <div class="ai-welcome-icon">🎓</div>
+            <div class="ai-welcome-title">Your School AI Assistant</div>
+            <div class="ai-welcome-text">
+              Ask me anything about your subjects, grades, or school life.<br />
+              All conversations stay on your device — nothing is sent to the
+              cloud.
+            </div>
+            <div class="ai-suggestions">
+              <span
+                class="ai-suggestion"
+                onclick="sendSuggestion('Explain my grades')"
+                >Explain my grades</span
+              >
+              <span
+                class="ai-suggestion"
+                onclick="sendSuggestion('Help with trigonometry')"
+                >Trig help</span
+              >
+              <span
+                class="ai-suggestion"
+                onclick="sendSuggestion('Homework help')"
+                >Homework help</span
+              >
+              <span
+                class="ai-suggestion"
+                onclick="sendSuggestion('Study tips for IGCSE')"
+                >IGCSE tips</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="ai-attachment-row" id="ai-attachment-row"></div>
+        <div class="ai-input-area">
+          <input
+            type="file"
+            id="ai-file-input"
+            style="display: none"
+            onchange="handleAIAttachment(this)"
+          />
+          <button
+            class="ai-attach-btn"
+            id="ai-attach-btn"
+            onclick="triggerAIAttach()"
+            title="Attach a file or picture"
+            type="button"
+          >
+            📎
+          </button>
+          <textarea
+            class="ai-input"
+            id="ai-input"
+            rows="1"
+            placeholder="Ask me anything…"
+            onkeydown="handleAIKey(event)"
+          ></textarea>
+          <button class="ai-send" id="ai-send" onclick="sendAIMessage()">
+            →
+          </button>
+        </div>
+      </div>
+      <button
+        class="ai-toggle"
+        id="ai-toggle"
+        onclick="toggleAI()"
+        title="AI Assistant"
+      >
+        🤖
+      </button>
+    </div>
+
+    <!-- ─── SEEDED DATABASE (must load before app logic) ─── -->
+    <script src="seed-data.js"></script>
+    <!-- ─── APPLICATION LOGIC ─── -->
+    <script src="1.js?v=132"></script>
+  </body>
+</html>
