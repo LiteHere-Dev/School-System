@@ -296,7 +296,15 @@
 
     <!-- ─── SEEDED DATABASE (must load before app logic) ─── -->
     <script src="seed-data.js"></script>
-    <!-- ─── APPLICATION LOGIC ─── -->
-    <script src="1.js?v=132"></script>
+    <!-- ─── APPLICATION LOGIC (split from 1.js, load order matters) ─── -->
+    <script src="js/01-db-engine-account-sync.js?v=132"></script>
+    <script src="js/02-shell-prefs-darkmode.js?v=132"></script>
+    <script src="js/03-translation-engine.js?v=132"></script>
+    <script src="js/04-dashboards-student.js?v=132"></script>
+    <script src="js/05-classes-teacher-gradebook.js?v=132"></script>
+    <script src="js/06-admin-accounts-records.js?v=132"></script>
+    <script src="js/07-ai-assistant-websearch.js?v=132"></script>
+    <script src="js/08-system-monitor.js?v=132"></script>
+    <script src="js/09-admin-system-pages.js?v=132"></script>
   </body>
 </html>
